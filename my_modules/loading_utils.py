@@ -44,6 +44,31 @@ def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
     else:
         start=1000-length/2 - 1
         
+    train_x=np.int8(x[train_idx,start:start+length])
+    valid_x=np.int8(x[valid_idx,start:start+length])
+    test_x=np.int8(x[test_idx,start:start+length])
+
+    train_y=np.int8(y[train_idx])
+    valid_y=np.int8(y[valid_idx])
+    test_y=np.int8(y[test_idx])
+    
+    return (train_x,train_y),(valid_x,valid_y),(test_x,test_y)
+
+def create_sets_f32(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
+    """Create train,valid,test sets from data."""
+    #select a random subset of data
+    rng = np.random.RandomState(23455) # not so random now
+    perm=rng.permutation(100000)
+    train_idx=perm[:N_train]
+    valid_idx=perm[N_train:N_train+N_valid]
+    test_idx=perm[N_train+N_valid:N_train+N_valid+N_test]
+    
+    #determine the slice of data needed
+    if length%2==0:
+        start=1000-length/2
+    else:
+        start=1000-length/2 - 1
+        
     train_x=np.float32(x[train_idx,start:start+length])
     valid_x=np.float32(x[valid_idx,start:start+length])
     test_x=np.float32(x[test_idx,start:start+length])
