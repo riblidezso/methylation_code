@@ -29,20 +29,20 @@ def read_my_data(fname):
     
     return x,y
 
-def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
+def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Create train,valid,test sets from data."""
     #select a random subset of data
     rng = np.random.RandomState(23455) # not so random now
-    perm=rng.permutation(100000)
+    perm=rng.permutation(len(y))
     train_idx=perm[:N_train]
     valid_idx=perm[N_train:N_train+N_valid]
     test_idx=perm[N_train+N_valid:N_train+N_valid+N_test]
     
     #determine the slice of data needed
     if length%2==0:
-        start=1000-length/2
+        start=500-length/2
     else:
-        start=1000-length/2 - 1
+        start=500-length/2 - 1
         
     train_x=np.int8(x[train_idx,start:start+length])
     valid_x=np.int8(x[valid_idx,start:start+length])
@@ -54,7 +54,7 @@ def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
     
     return (train_x,train_y),(valid_x,valid_y),(test_x,test_y)
 
-def create_sets_f32(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
+def create_sets_f32(x,y,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Create train,valid,test sets from data."""
     #select a random subset of data
     rng = np.random.RandomState(23455) # not so random now
@@ -65,9 +65,9 @@ def create_sets_f32(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
     
     #determine the slice of data needed
     if length%2==0:
-        start=1000-length/2
+        start=500-length/2
     else:
-        start=1000-length/2 - 1
+        start=500-length/2 - 1
         
     train_x=np.float32(x[train_idx,start:start+length])
     valid_x=np.float32(x[valid_idx,start:start+length])
@@ -79,7 +79,7 @@ def create_sets_f32(x,y,N_train=8000,N_valid=1000,N_test=1000,length=2000):
 
     return (train_x,train_y),(valid_x,valid_y),(test_x,test_y)
 
-def load_data(fname,N_train=8000,N_valid=1000,N_test=1000,length=2000):
+def load_data(fname,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Load and segment my data into random train,valid,test sets."""
     (train_x,train_y),(valid_x,valid_y),(test_x,test_y) = create_sets(
         read_my_data(fname),N_train,N_valid,N_test,length)
@@ -87,7 +87,7 @@ def load_data(fname,N_train=8000,N_valid=1000,N_test=1000,length=2000):
     return (train_x,train_y),(valid_x,valid_y),(test_x,test_y)
 
 
-def load_data_4_theano(fname,N_train=8000,N_valid=1000,N_test=1000,length=2000):
+def load_data_4_theano(fname,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Load and segment my data into random train,valid,test sets for theano."""
     (train,valid,test)=load_data(fname,N_train,N_valid,N_test,length)
    
