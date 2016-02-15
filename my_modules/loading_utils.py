@@ -6,28 +6,22 @@ import gc
 def read_my_data(fname):
     """Load my data from file into np.arrays.
     
-    It uses int8 for memory efficiency, and speed. Later the values will be
-    used as float64 and int32, but pandas double memory usage during loading, so
-    I simply can not load them like that. This way the memory usage is not double but
-    1+small.
-    I have to use garbage collector, because pandas read_csv leaves garbage around.
+    I had to use garbage collector, because pandas read_csv leaves garbage around.
     """
     
     #load data
     print "Loading data... "
-    x=pd.read_csv(fname,sep='\t',engine='c',dtype=np.int8,header=None)
-    #shuffle rows
-    #this is not necessary it is juts for safety now
-    x=x.reindex(np.random.permutation(x.index)).reset_index(drop=True)
-
+    x=pd.read_csv(fname,sep='\t',header=None)
+    
+    probe_id=x[0]
     y=np.array(x.iloc[:,-1])
-    x=np.array(x.iloc[:,:-1])
+    x=np.array(x.iloc[:,1:-1])
     
     # for some reason not everything is cleaned up
     #when using the pandas read_csv
     gc.collect()
     
-    return x,y
+    return probe_id,x,y
 
 def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Create train,valid,test sets from data."""
