@@ -1,9 +1,8 @@
-import theano
 import pandas as pd
 import numpy as np
 import gc
 
-def read_my_data(fname):
+def read_my_data(fname,**kwargs):
     """Load my data from file into np.arrays.
     
     I had to use garbage collector, because pandas read_csv leaves garbage around.
@@ -13,15 +12,16 @@ def read_my_data(fname):
     print "Loading data... "
     x=pd.read_csv(fname,sep='\t',header=None)
     
-    probe_id=x[0]
-    y=np.array(x.iloc[:,-1])
-    x=np.array(x.iloc[:,1:-1])
-    
     # for some reason not everything is cleaned up
     #when using the pandas read_csv
     gc.collect()
     
-    return probe_id,x,y
+    #probe_id=x[0]
+    #y=x.iloc[:,-1].values.astype(np.int8)
+    #x=x.iloc[:,1:-1].values.astype(np.int8)
+    #return probe_id,x,y
+    
+    return x[0],x.iloc[:,1:-1].values.astype(np.int8),x.iloc[:,-1].values.astype(np.int8)
 
 def create_sets(x,y,N_train=8000,N_valid=1000,N_test=1000,length=1000):
     """Create train,valid,test sets from data."""
